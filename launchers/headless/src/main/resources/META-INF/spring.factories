@@ -41,6 +41,7 @@ com.tencent.supersonic.headless.core.translator.parser.QueryParser=\
     com.tencent.supersonic.headless.core.translator.parser.OntologyQueryParser
 
 com.tencent.supersonic.headless.core.executor.QueryExecutor=\
+    com.tencent.supersonic.headless.core.executor.SkyrocProfileQueryExecutor,\
     com.tencent.supersonic.headless.core.executor.JdbcExecutor
 
 com.tencent.supersonic.headless.core.cache.QueryCache=\
