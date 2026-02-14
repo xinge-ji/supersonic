@@ -445,14 +445,29 @@ public class DictUtils {
         if (DateConf.DateMode.ALL.equals(config.getDateConf().getDateMode())) {
             return "";
         }
+
         // 静态日期
         if (DateConf.DateMode.BETWEEN.equals(config.getDateConf().getDateMode())) {
+            String dateFormat = partitionTimeDimension.getDateFormat();
+            if (StringUtils.isEmpty(dateFormat)) {
+                dateFormat = "yyyy-MM-dd"; // 默认格式
+            }
+
+            // 格式化起止日期
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+            String startDate =
+                    LocalDate.parse(config.getDateConf().getStartDate()).format(formatter);
+            String endDate = LocalDate.parse(config.getDateConf().getEndDate()).format(formatter);
+
             return String.format("( %s >= '%s' and %s <= '%s' )",
-                    config.getDateConf().getDateField(), config.getDateConf().getStartDate(),
-                    config.getDateConf().getDateField(), config.getDateConf().getEndDate());
+                    partitionTimeDimension.getBizName(), startDate,
+                    partitionTimeDimension.getBizName(), endDate);
         }
+
         // 动态日期
         if (DateConf.DateMode.RECENT.equals(config.getDateConf().getDateMode())) {
+            dictItemResp.getConfig().getDateConf()
+                    .setDateField(partitionTimeDimension.getBizName());
             return generateDictDateFilterRecent(dictItemResp);
         }
 
